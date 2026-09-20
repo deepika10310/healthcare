@@ -1,9 +1,9 @@
-import React from 'react';
+import GreetingBoundary from '../components/GreetingBoundary';
 
 const Home = () => {
   return (
-    <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'100vh'}}>
-      <h1>Hello, World!</h1>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <GreetingBoundary />
     </div>
   );
 };
