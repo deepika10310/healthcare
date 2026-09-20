@@ -1,0 +1,48 @@
+# docker-compose.yml
+#
+# A minimal Compose file that builds the backend and frontend images
+# defined in the `backend/` and `frontend/` directories and exposes
+# the services on the host machine.
+#
+# Usage:
+#   docker compose up --build
+#
+# The frontend will proxy API requests to the backend by default via
+# Next.js' built‑in rewrites (adjust if you change the API path).
+
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: hello-backend
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    # If you want to add health checks, uncomment the block below
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+
+  # frontend:
+  #   build:
+  #     context: .
+  #     dockerfile: frontend/Dockerfile
+  #   container_name: hello-frontend
+  #   ports:
+  #     - "3000:3000"
+  #   restart: unless-stopped
+    # If your frontend needs to talk to the backend you can set
+    # an environment variable pointing to the backend's service name
+    # (e.g., NEXT_PUBLIC_API_URL=http://backend:8080)
+    # environment:
+    #   - NEXT_PUBLIC_API_URL=http://backend:8080
+
+# By default Compose creates a single network called "compose_default"
+# which allows the services to resolve each other by service name.
