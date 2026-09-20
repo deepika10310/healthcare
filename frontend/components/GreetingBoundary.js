@@ -1,9 +1,9 @@
-import { getGreeting } from '../services/greetingService';
 import React, { useEffect, useState } from 'react';
+import { getGreeting } from '../services/greetingService';
 
 /**
  * Boundary component – decides *when* we need a greeting and *why*.
- * It orchestrates the action (API call) and renders the result.
+ * It orchestrates the action (API call) via the service and renders the result.
  */
 const GreetingBoundary = () => {
   const [greeting, setGreeting] = useState(null);
@@ -12,17 +12,16 @@ const GreetingBoundary = () => {
   useEffect(() => {
     const fetchGreeting = async () => {
       try {
-        const res = await fetch('/api/greeting');
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}`);
-        }
-        const data = await res.json();
-        setGreeting(data.message);
+        // The service now returns the message string on success
+        const message = await getGreeting();
+        setGreeting(message);
       } catch (err) {
+        // `err` is the error object returned by the service
         console.error(err);
-        setError('Failed to load greeting');
+        setError(err.error || 'Failed to load greeting');
       }
     };
+
     fetchGreeting();
   }, []);
 
@@ -33,3 +32,4 @@ const GreetingBoundary = () => {
 };
 
 export default GreetingBoundary;
+
